@@ -1,0 +1,8 @@
+- content_for :title, "Editing pdf"
+%h1 Editing pdf
+= render "form", pdf: @pdf
+%br/
+%div
+  = link_to "Show this pdf", @pdf
+  |
+  \#{link_to "Back to pdfs", pdfs_path}
