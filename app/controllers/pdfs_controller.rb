@@ -22,6 +22,12 @@ class PdfsController < ApplicationController
   # POST /pdfs or /pdfs.json
   def create
     @pdf = Pdf.new(pdf_params)
+    pdf_file = params["pdf_file"]
+    @pdf.owner = @pdf.uploaded_by = Current.user
+    @pdf.uploaded_filename = pdf_file.original_filename
+    @pdf.uploaded_at = DateTime.now
+    @pdf.page_count = 42
+    p "!!! @pdf #{@pdf.inspect} pdf_file #{@pdf.pdf_file.inspect}"
 
     respond_to do |format|
       if @pdf.save
@@ -65,6 +71,7 @@ class PdfsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def pdf_params
-      params.expect(pdf: [ :name, :owner_id, :version, :description, :page_count, :first_page_numberuploaded_filename, :uploaded_at, :uploaded_by_id ])
+      params.expect(pdf: [ :name, :owner_id, :version, :description, :pdf_file, :page_count, :first_page_number,
+                           :uploaded_filename, :uploaded_at, :uploaded_by_id ])
     end
 end
